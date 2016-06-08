@@ -3,12 +3,18 @@ package modelos;
 /**
  * Created by saleta on 5/30/2016.
  */
-public class Usuario {
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+public class Usuario implements Serializable {
+    @Id
     private String username;
     private String password;
     private String nombre;
     private Boolean administrador;
     private Boolean autor;
+    @Transient
     private Boolean esInvitado = false;
 
     public Boolean getEsInvitado() {
