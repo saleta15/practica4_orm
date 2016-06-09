@@ -1,30 +1,40 @@
 package modelos;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by saleta on 5/30/2016.
  */
-
-public class Articulo {
+@Entity
+public class Articulo implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String titulo;
     private  String cuerpo;
     private String preview;
-
+    private Integer likes;
     public String getPreview() {
         return preview;
     }
 
+
+
     public void setPreview(String preview) {
         this.preview = preview;
     }
-
-    private Usuario autor;
+    @ManyToOne
+    private Usuario autor;//un autor puede tener muchos articulos
     private Date fecha;
-    private ArrayList<Comentario> comentarios;
-    private ArrayList<Etiqueta> etiquetas;
+
+    @OneToMany
+    private ArrayList<Comentario> comentarios;//Muchos comenterio puede tener un articulo
+
+    @OneToMany
+    private ArrayList<Etiqueta> etiquetas;//Muchas etiquetas puede tener un articulo
 
     public int getId() {
         return id;

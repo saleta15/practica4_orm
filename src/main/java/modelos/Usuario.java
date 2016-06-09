@@ -5,6 +5,7 @@ package modelos;
  */
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 public class Usuario implements Serializable {
@@ -16,6 +17,11 @@ public class Usuario implements Serializable {
     private Boolean autor;
     @Transient
     private Boolean esInvitado = false;
+
+    @OneToMany(mappedBy = "autor") // La clase Clase es la dueña de la relación.
+
+    @Transient
+    private Set<Articulo> listaArticulos;
 
     public Boolean getEsInvitado() {
         return esInvitado;

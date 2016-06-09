@@ -5,7 +5,13 @@ package Main; /**
 
 
 
+import modelos.Articulo;
+import modelos.Comentario;
+import modelos.Etiqueta;
 import modelos.Usuario;
+import services.ArticuloServices;
+import services.ComentarioServices;
+import services.EtiquetaServices;
 import services.UsuarioServices;
 
 import javax.persistence.EntityManager;
@@ -26,6 +32,10 @@ public class Main {
 //        mf.manejarFormularios();
 //        Filtro ft = new Filtro();
 //        ft.aplicarFiltros();
+
+        Usuario aa=new Usuario();
+        UsuarioServices.getInstancia().crear(aa);
+
 
 
 
