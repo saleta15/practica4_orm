@@ -13,11 +13,18 @@ public class Etiqueta implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String etiqueta;
+
+
+    @ManyToOne
     private Articulo articulo;
 
+    public Articulo getArticulo() {
+        return articulo;
+    }
 
-    @OneToOne(mappedBy = "etiquetas") // La clase Clase es la dueña de la relación.
-    private Set<Articulo> listaArticulos;
+    public void setArticulo(Articulo articulo) {
+        this.articulo = articulo;
+    }
 
     public int getId() {
         return id;

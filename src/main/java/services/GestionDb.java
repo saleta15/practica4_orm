@@ -72,7 +72,7 @@ public class GestionDb<T> {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            em.remove(entidad);
+            em.remove(em.contains(entidad) ? entidad : em.merge(entidad));
             em.getTransaction().commit();
         }catch (Exception ex){
             em.getTransaction().rollback();

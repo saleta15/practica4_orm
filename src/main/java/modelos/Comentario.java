@@ -14,13 +14,14 @@ public class Comentario implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String comentario;
+    @ManyToOne
     private Usuario autor;
-    private Articulo articulo;
     private Integer likes;
-
-
-    @OneToOne(mappedBy = "comentarios") // La clase Clase es la dueña de la relación.
-    private Set<Articulo> listaArticulos;
+    @ManyToOne
+    private Articulo articulo;
+    public void setArticulo(Articulo articulo) {
+        this.articulo = articulo;
+    }
 
     public int getId() {
         return id;
@@ -46,12 +47,16 @@ public class Comentario implements Serializable {
         this.autor = autor;
     }
 
-    public Articulo getArticulo() {
-        return articulo;
+    public Integer getLikes() {
+        return likes;
     }
 
-    public void setArticulo(Articulo articulo) {
-        this.articulo = articulo;
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
+
+    public Articulo getArticulo() {
+        return articulo;
     }
 
     public Comentario(String comentario, Usuario autor, Articulo articulo) {

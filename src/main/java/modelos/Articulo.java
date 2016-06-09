@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by saleta on 5/30/2016.
@@ -15,10 +16,14 @@ public class Articulo implements Serializable {
     private int id;
     private String titulo;
     private  String cuerpo;
+    @Transient
     private String preview;
     private Integer likes;
     public String getPreview() {
-        return preview;
+        if (cuerpo.length() > 70){
+            return cuerpo.substring(0,69);
+        }
+        return cuerpo;
     }
 
 
@@ -30,11 +35,11 @@ public class Articulo implements Serializable {
     private Usuario autor;//un autor puede tener muchos articulos
     private Date fecha;
 
-    @OneToMany
-    private ArrayList<Comentario> comentarios;//Muchos comenterio puede tener un articulo
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "articulo")
+    private Set<Comentario> comentarios;//Muchos comenterio puede tener un articulo
 
-    @OneToMany
-    private ArrayList<Etiqueta> etiquetas;//Muchas etiquetas puede tener un articulo
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "articulo")
+    private Set<Etiqueta> etiquetas;//Muchas etiquetas puede tener un articulo
 
     public int getId() {
         return id;
@@ -76,28 +81,30 @@ public class Articulo implements Serializable {
         this.fecha = fecha;
     }
 
-    public ArrayList<Comentario> getComentarios() {
+    public Set<Comentario> getComentarios() {
         return comentarios;
     }
 
-    public void setComentarios(ArrayList<Comentario> comentarios) {
+    public void setComentarios(Set<Comentario> comentarios) {
         this.comentarios = comentarios;
     }
 
-    public ArrayList<Etiqueta> getEtiquetas() {
+    public Set<Etiqueta> getEtiquetas() {
         return etiquetas;
     }
 
-    public void setEtiquetas(ArrayList<Etiqueta> etiquetas) {
+    public void setEtiquetas(Set<Etiqueta> etiquetas) {
         this.etiquetas = etiquetas;
     }
 
     public String getEtiquetasString(){
         String et = "";
-        for (int i=0; i<etiquetas.size();i++){
-            et+=etiquetas.get(i).getEtiqueta();
+        int i = 0;
+        for (Etiqueta e : this.etiquetas){
+            et+=e.getEtiqueta();
             if(i< etiquetas.size()-1)
                 et+=",";
+            i++;
         }
         return et;
     }

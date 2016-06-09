@@ -16,6 +16,8 @@ import services.UsuarioServices;
 
 import javax.persistence.EntityManager;
 
+import java.util.Date;
+
 import static spark.Spark.*;
 
 
@@ -24,17 +26,25 @@ public class Main {
     public static void main(String[] args) throws Exception{
 
         staticFileLocation("/publico");
+        if (!UsuarioServices.getInstancia().hayAdmin()){
+            Usuario admin = new Usuario();
+            admin.setAdministrador(true);
+            admin.setUsername("admin");
+            admin.setAutor(true);
+            admin.setPassword("1234");
+            admin.setNombre("Administrador");
+            UsuarioServices.getInstancia().crear(admin);
+        }
+        ManejoTemplates mt = new ManejoTemplates();
+        mt.manejarTemplates();
+        ManejoFormularios mf = new ManejoFormularios();
+        mf.manejarFormularios();
+        Filtro ft = new Filtro();
+        ft.aplicarFiltros();
 
-//
-//        ManejoTemplates mt = new ManejoTemplates();
-//        mt.manejarTemplates();
-//        ManejoFormularios mf = new ManejoFormularios();
-//        mf.manejarFormularios();
-//        Filtro ft = new Filtro();
-//        ft.aplicarFiltros();
 
-        Usuario aa=new Usuario();
-        UsuarioServices.getInstancia().crear(aa);
+
+
 
 
 
