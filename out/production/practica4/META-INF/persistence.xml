@@ -5,9 +5,9 @@
              version="2.1">
     <persistence-unit name="MiUnidadPersistencia" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>com.practica4.modelos.Usuario</class>
-        <class>com.avathartech.sparkjavaorm.entidades.Profesor</class>
-        <class>com.avathartech.sparkjavaorm.entidades.Clase</class>
+        <class>modelos.Usuario</class>
+        <class>sparkjavaorm.entidades.Profesor</class>
+        <class>sparkjavaorm.entidades.Clase</class>
         <properties>
             <!--<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test" />-->
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test" />

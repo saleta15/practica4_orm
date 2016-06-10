@@ -32,7 +32,8 @@
             <hr>
             <p id="cuerpo">${articulo.cuerpo}</p>
             <hr>
-            <br><br>
+            <br>
+            <br>
             <div class="well">
                 <h4>¿Quieres decir algo?</h4>
                 <form action="/procesarNuevoComentario/" METHOD="post">
@@ -67,6 +68,14 @@
                                 </div>
                             </form>
                         </#if>
+                        <form method="post" action="/megusta/">
+                            <div class="col-md-2">
+                                <input type="hidden" name="comentario" value="${comentario.id}"></input>
+                                <input type="hidden" name="articulo" value="${articulo.id}"></input>
+
+                                <button class="btn btn-success" >Like</button>
+                            </div>
+                        </form>
 
                     </div>
 
