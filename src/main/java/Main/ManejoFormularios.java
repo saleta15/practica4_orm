@@ -114,8 +114,38 @@ public class ManejoFormularios {
                 response.redirect("../login");
             }
             else{
-              //  int id = Integer.parseInt(request.queryParams("comentario"));
-               // LikeComentario lc = LikeComentarioServices.getInstancia().find(id);
+              int comentarioId = Integer.parseInt(request.queryParams("comentario"));
+                Comentario comentario = ComentarioServices.getInstancia().find(comentarioId);
+                LikeComentario lc = new LikeComentario();
+                lc.setComentario(comentario);
+                if(request.queryParams("action").equals("like"))
+                    lc.setEsPositivo(true);
+                else if(request.queryParams("action").equals("dislike"))
+                    lc.setEsPositivo(false);
+                lc.setUsuario(u);
+                LikeComentarioServices.getInstancia().crear(lc);
+
+                response.redirect("/verArticulo/" + Integer.parseInt(request.queryParams("articulo")));
+            }
+            return "success";
+        });
+
+        post("megustaArticulo/", (request, response) -> {
+            Usuario u = request.session().attribute("usuario");
+            if(u == null) {
+                response.redirect("../login");
+            }
+            else{
+                int articuloId = Integer.parseInt(request.queryParams("articulo"));
+                Articulo a = ArticuloServices.getInstancia().find(articuloId);
+                LikeArticulo la = new LikeArticulo();
+                la.setArticulo(a);
+                if(request.queryParams("action").equals("like"))
+                    la.setEsPositivo(true);
+                else if(request.queryParams("action").equals("dislike"))
+                    la.setEsPositivo(false);
+                la.setUsuario(u);
+                LikeArticuloServices.getInstancia().crear(la);
 
                 response.redirect("/verArticulo/" + Integer.parseInt(request.queryParams("articulo")));
             }

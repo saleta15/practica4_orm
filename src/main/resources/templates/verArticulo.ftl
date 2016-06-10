@@ -3,6 +3,7 @@
 
 <head>
     <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap-theme.css" rel="stylesheet">
     <link href="/css/miEstilo.css" rel="stylesheet">
 </head>
 
@@ -17,8 +18,31 @@
     <div class="row">
 
         <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-9">
+                    <h1>${articulo.titulo}</h1>
+                </div>
+                <div  class="col-lg-1" style="margin-top: 15px">
+                    <#if articulo.valoracion gte 0 >
+                     <button class="btn btn-success" style="font-size: 20px; border-radius: 100%">${articulo.valoracion}</button>
+                    <#else>
+                        <button class="btn btn-danger" style="font-size: 20px; border-radius: 100%">${articulo.valoracion}</button>
+                    </#if>
 
-            <h1>${articulo.titulo}</h1>
+                </div>
+            <#if !articulo.estaValorado>
+                <div class="col-lg-2" style="margin-top: 16px">
+                    <form method="post" action="/megustaArticulo/">
+
+                        <input type="hidden" name="usuario" value="${usuario.username}"></input>
+                        <input type="hidden" name="articulo" value="${articulo.id}"></input>
+                        <button type="submit" name="action" value="like" class="btn btn-success"><span class="glyphicon glyphicon-thumbs-up"></span> </button>
+                        <button type="submit" name="action" value="dislike" class="btn btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span> </button>
+
+                    </form>
+                </div>
+            </#if>
+            </div>
 
 
             <p class="lead">
@@ -47,7 +71,7 @@
             </div>
             <h4>Comentarios</h4>
             <hr>
-            <#list articulo.comentarios as comentario>
+            <#list comentarios as comentario>
                 <div class="media">
                     <div class="media-body">
 
@@ -56,24 +80,26 @@
                     </div>
                 </div>
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-9">
                             ${comentario.comentario}
                         </div>
-                        <#if usuario.administrador || usuario.username == articulo.autor.username>
-                            <form method="post" action="/procesarBorrarComentario/">
-                                <input type="hidden" name="comentario" value="${comentario.id}"></input>
-                                <input type="hidden" name="articulo" value="${articulo.id}"></input>
-                                <div class="col-md-2">
-                                    <button class="btn btn-danger" >Borrar</button>
-                                </div>
-                            </form>
-                        </#if>
+                        <div class="col-md-1">
+                            <#if comentario.valoracion gte 0 >
+                                <button class="btn btn-success" style="font-size: 20px; border-radius: 100%">${comentario.valoracion}</button>
+                            <#else>
+                                <button class="btn btn-danger" style="font-size: 20px; border-radius: 100%">${comentario.valoracion}</button>
+                            </#if>
+                        </div>
                         <form method="post" action="/megusta/">
                             <div class="col-md-2">
+                                <input type="hidden" name="usuario" value="${usuario.username}"></input>
                                 <input type="hidden" name="comentario" value="${comentario.id}"></input>
                                 <input type="hidden" name="articulo" value="${articulo.id}"></input>
+                                <#if !comentario.estaValorado>
+                                    <button type="submit" name="action" value="like" class="btn btn-success"><span class="glyphicon glyphicon-thumbs-up"></span> </button>
+                                    <button type="submit" name="action" value="dislike" class="btn btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span> </button>
+                                </#if>
 
-                                <button class="btn btn-success" >Like</button>
                             </div>
                         </form>
 

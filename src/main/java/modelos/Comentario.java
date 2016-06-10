@@ -2,6 +2,7 @@ package modelos;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Set;
 
 /**
@@ -19,6 +20,35 @@ public class Comentario implements Serializable {
     private Integer likes;
     @ManyToOne
     private Articulo articulo;
+    @Transient
+    private boolean estaValorado;
+    @Transient
+    private Integer valoracion;
+
+    public Integer getValoracion() {
+        return valoracion;
+    }
+
+    public void setValoracion(Integer valoracion) {
+        this.valoracion = valoracion;
+    }
+
+    public Boolean getEstaValorado() {
+        return estaValorado;
+    }
+
+    public void setEstaValorado(Boolean estaValorado) {
+        this.estaValorado = estaValorado;
+    }
+
+    public boolean isEstaValorado() {
+        return estaValorado;
+    }
+
+    public void setEstaValorado(boolean estaValorado) {
+        this.estaValorado = estaValorado;
+    }
+
     public void setArticulo(Articulo articulo) {
         this.articulo = articulo;
     }

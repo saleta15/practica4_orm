@@ -9,6 +9,8 @@
         <class>modelos.Etiqueta</class>
         <class>modelos.Articulo</class>
         <class>modelos.Comentario</class>
+        <class>modelos.LikeComentario</class>
+        <class>modelos.LikeArticulo</class>
 
         <properties>
             <!--<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test" />-->

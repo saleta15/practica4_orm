@@ -1,7 +1,6 @@
 package modelos;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -10,10 +9,21 @@ import java.io.Serializable;
 @Entity
 public class LikeArticulo  implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String usuario;
-    private String articulo;
+    @OneToOne
+    private Usuario usuario;
+    @OneToOne
+    private Articulo articulo;
+    private boolean esPositivo;
 
+    public boolean isEsPositivo() {
+        return esPositivo;
+    }
+
+    public void setEsPositivo(boolean esPositivo) {
+        this.esPositivo = esPositivo;
+    }
 
     public int getId() {
         return id;
@@ -23,19 +33,19 @@ public class LikeArticulo  implements Serializable {
         this.id = id;
     }
 
-    public String getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(String usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
-    public String getArticulo() {
+    public Articulo getArticulo() {
         return articulo;
     }
 
-    public void setArticulo(String articulo) {
+    public void setArticulo(Articulo articulo) {
         this.articulo = articulo;
     }
 }

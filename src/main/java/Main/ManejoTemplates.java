@@ -1,10 +1,10 @@
 package Main;
 
 import freemarker.template.Configuration;
-import modelos.Articulo;
-import modelos.Etiqueta;
-import modelos.Usuario;
+import modelos.*;
 import services.ArticuloServices;
+import services.LikeArticuloServices;
+import services.LikeComentarioServices;
 import services.UsuarioServices;
 import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
@@ -160,9 +160,18 @@ public class ManejoTemplates {
                 u.setUsername("guest");
             }
             Articulo a = ArticuloServices.getInstancia().find(Integer.parseInt(request.params("articulo")));
-
+            LikeComentarioServices.getInstancia().prepararComentarios(a,u);
+            List<Comentario> comentarios = new ArrayList<Comentario>(a.getComentarios());
+            Comparator<Comentario> comparator = new Comparator<Comentario>() {
+                public int compare(Comentario c1, Comentario c2) {
+                    return c2.getId() - c1.getId();
+                }
+            };
+            LikeArticuloServices.getInstancia().prepararArticulo(a,u);
+            Collections.sort(comentarios,comparator);
             attributes.put("usuario", u);
             attributes.put("articulo", a);
+            attributes.put("comentarios",comentarios);
             return new ModelAndView(attributes, "verArticulo.ftl");
         }, freeMarkerEngine);
 

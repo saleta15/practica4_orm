@@ -41,6 +41,27 @@ public class Articulo implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "articulo")
     private Set<Etiqueta> etiquetas;//Muchas etiquetas puede tener un articulo
 
+    @Transient
+    private boolean estaValorado;
+
+    public boolean isEstaValorado() {
+        return estaValorado;
+    }
+
+    public void setEstaValorado(boolean estaValorado) {
+        this.estaValorado = estaValorado;
+    }
+
+    public Integer getValoracion() {
+        return valoracion;
+    }
+
+    public void setValoracion(Integer valoracion) {
+        this.valoracion = valoracion;
+    }
+
+    @Transient
+    private Integer valoracion;
     public int getId() {
         return id;
     }
