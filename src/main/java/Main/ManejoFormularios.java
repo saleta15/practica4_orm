@@ -1,14 +1,8 @@
 package Main;
 
 import freemarker.template.Configuration;
-import modelos.Articulo;
-import modelos.Comentario;
-import modelos.Etiqueta;
-import modelos.Usuario;
-import services.ArticuloServices;
-import services.ComentarioServices;
-import services.EtiquetaServices;
-import services.UsuarioServices;
+import modelos.*;
+import services.*;
 import spark.ModelAndView;
 import spark.Session;
 import spark.template.freemarker.FreeMarkerEngine;
@@ -108,6 +102,21 @@ public class ManejoFormularios {
                 int id = Integer.parseInt(request.queryParams("comentario"));
                 Comentario c = ComentarioServices.getInstancia().find(id);
                 ComentarioServices.getInstancia().eliminar(c);
+                response.redirect("/verArticulo/" + Integer.parseInt(request.queryParams("articulo")));
+            }
+            return "success";
+        });
+
+
+        post("megusta/", (request, response) -> {
+            Usuario u = request.session().attribute("usuario");
+            if(u == null) {
+                response.redirect("../login");
+            }
+            else{
+              //  int id = Integer.parseInt(request.queryParams("comentario"));
+               // LikeComentario lc = LikeComentarioServices.getInstancia().find(id);
+
                 response.redirect("/verArticulo/" + Integer.parseInt(request.queryParams("articulo")));
             }
             return "success";
