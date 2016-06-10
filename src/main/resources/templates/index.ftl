@@ -16,17 +16,29 @@
                 <hr>
                 <#list articulos as articulo>
                     <div class="col-lg-12">
-                        <a href="verArticulo/${articulo.id}"><h4>${articulo.titulo}</h4></a>
+                        <a href="/verArticulo/${articulo.id}"><h4>${articulo.titulo}</h4></a>
                         <p>${articulo.fecha}</p>
                         <p>${articulo.preview} </p>
                         <#list articulo.etiquetas as e>
-                            <button id="etiqueta" class="btn btn-primary">${e.etiqueta}</button>
+                            <a href="/etiqueta/${e.etiqueta}/1"><button id="etiqueta" class="btn btn-primary">${e.etiqueta}</button></a>
                         </#list>
                         <hr>
                     </div>
                 </#list>
             </div>
+
         </div>
+        <ul class="pagination" >
+        <#list 1..cantidadPaginas as  i>
+            <#if filtrado>
+                <li><a href="/etiqueta/${etiqueta}/${i}">${i}</a></li>
+            <#else>
+                <li><a href="/pagina/${i}">${i}</a></li>
+            </#if>
+
+        </#list>
+        </ul>
+
 </div>
 
 

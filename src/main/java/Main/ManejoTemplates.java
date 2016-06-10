@@ -2,6 +2,7 @@ package Main;
 
 import freemarker.template.Configuration;
 import modelos.Articulo;
+import modelos.Etiqueta;
 import modelos.Usuario;
 import services.ArticuloServices;
 import services.UsuarioServices;
@@ -11,6 +12,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 import java.util.*;
 
 import static spark.Spark.get;
+import static spark.Spark.halt;
 import static spark.Spark.post;
 
 public class ManejoTemplates {
@@ -22,8 +24,12 @@ public class ManejoTemplates {
         configuration.setClassForTemplateLoading(ManejoTemplates.class , "/templates");
         FreeMarkerEngine freeMarkerEngine = new FreeMarkerEngine(configuration);
 
-
         get("/", (request, response) -> {
+           response.redirect("pagina/1");
+            return "";
+        });
+
+        get("pagina/:pagina", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             Usuario u = request.session().attribute("usuario");
             if(u == null){
@@ -34,10 +40,69 @@ public class ManejoTemplates {
             }
 
             List<Articulo> articulos = ArticuloServices.getInstancia().findAll();
+            int longitud = articulos.size();
+            int cantidadPaginas = longitud/5;
+            int paginaSolicitada = Integer.parseInt(request.params("pagina"));
+            if(longitud%5!=0)
+                cantidadPaginas++;
+
+            if(paginaSolicitada >cantidadPaginas)
+                halt(404,"Esta pagina no existe");
+            int offset;
+            if(paginaSolicitada == cantidadPaginas && longitud%5!=0)//Se solicitó cargar la ultima pagina
+                offset = longitud%5;
+            else
+                offset = 5;
+            List<Articulo> articulosMostrados = articulos.subList((paginaSolicitada-1)*5,
+                                                                  (paginaSolicitada-1)*5+offset );
             attributes.put("usuario", u);
-            attributes.put("articulos", articulos);
+            attributes.put("articulos", articulosMostrados);
+            attributes.put("cantidadPaginas",cantidadPaginas);
+            attributes.put("filtrado",false);
+
             return new ModelAndView(attributes, "index.ftl");
         }, freeMarkerEngine);
+
+
+        get("/login", (request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "login.ftl");
+        }, freeMarkerEngine);
+
+        get("/etiqueta/:etiqueta/:pagina", (request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            Usuario u = request.session().attribute("usuario");
+            if(u == null){
+                u = new Usuario();
+                u.setAutor(false);
+                u.setAdministrador(false);
+                u.setEsInvitado(true);
+            }
+
+            List<Articulo> articulos = this.getArticulosEtiqueta(request.params("etiqueta"));
+            int longitud = articulos.size();
+            int cantidadPaginas = longitud/5;
+            int paginaSolicitada = Integer.parseInt(request.params("pagina"));
+            if(longitud%5!=0)
+                cantidadPaginas++;
+
+            if(paginaSolicitada >cantidadPaginas)
+                halt(404,"Esta pagina no existe");
+            int offset;
+            if(paginaSolicitada == cantidadPaginas && longitud%5!=0)//Se solicitó cargar la ultima pagina
+                offset = longitud%5;
+            else
+                offset = 5;
+            List<Articulo> articulosMostrados = articulos.subList((paginaSolicitada-1)*5,
+                    (paginaSolicitada-1)*5+offset );
+            attributes.put("usuario", u);
+            attributes.put("articulos", articulosMostrados);
+            attributes.put("cantidadPaginas",cantidadPaginas);
+            attributes.put("filtrado",true);
+            attributes.put("etiqueta",request.params("etiqueta"));
+            return new ModelAndView(attributes, "index.ftl");
+        }, freeMarkerEngine);
+
 
         get("/login", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
@@ -114,5 +179,20 @@ public class ManejoTemplates {
 
 
 
+    }
+
+    private ArrayList<Articulo> getArticulosEtiqueta(String etiqueta){
+        List<Articulo> articulos =  ArticuloServices.getInstancia().findAll();
+        ArrayList<Articulo> art = new ArrayList<>();
+        for(Articulo a: articulos){
+            for(Etiqueta e: a.getEtiquetas()){
+
+                if(e.getEtiqueta().equals(etiqueta)) {
+                    art.add(a);
+                    break;
+                }
+            }
+        }
+        return art;
     }
 }
